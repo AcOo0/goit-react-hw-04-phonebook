@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { nanoid } from 'nanoid';
 
 import styles from './my-contacts.module.css'
@@ -8,8 +8,15 @@ import MyContactList from './MyContactList/MyContactList';
 import Filter from './Filter/Filter';
 
 const MyContacts = ({}) => {
-    const [contacts, setContacts] = useState([]);
+    const [contacts, setContacts] = useState(() => {
+        const data = JSON.parse(localStorage.getItem("my-contacts"));
+        return data || [];
+    });
     const [filter, setFilter] = useState("");
+
+    useEffect(() => {
+        localStorage.setItem("my-contacts", JSON.stringify(contacts));
+    }, [contacts]);
 
     const isDublicate = ({ name, number }) => {
         const normalizedName = name.toLowerCase();
@@ -22,7 +29,7 @@ const MyContacts = ({}) => {
         })
 
         return Boolean(dublicate);
-    }
+    };
 
     const addContact = (data) => {
         
@@ -38,11 +45,11 @@ const MyContacts = ({}) => {
 
             return [...prevContacts, newContact];
         })
-    }
+    };
 
     const deleteContact = (id) => {
         setContacts(prevContacts => prevContacts.filter(item => item.id !== id))
-    }
+    };
 
     const changeFilter = ({ target }) => setFilter(target.value);
 
@@ -60,7 +67,7 @@ const MyContacts = ({}) => {
         })
 
         return filteredContacts;
-    }
+    };
 
     const items = getFilterdContacts();
 
