@@ -7,7 +7,7 @@ import MyContactForm from './MyContactForm/MyContactForm';
 import MyContactList from './MyContactList/MyContactList';
 import Filter from './Filter/Filter';
 
-const MyContacts = ({}) => {
+const MyContacts = () => {
     const [contacts, setContacts] = useState(() => {
         const data = JSON.parse(localStorage.getItem("my-contacts"));
         return data || [];
