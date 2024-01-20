@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { useState } from "react";
 import { nanoid } from "nanoid";
 
 import styles from './my-contact-form.module.css'
@@ -10,46 +10,45 @@ const INITIAL_STATE = {
     number: ''
 };
 
-class MyContactForm extends Component {
-    contactNameId = nanoid();
-    contactNumberId = nanoid();
+const MyContactForm = ({ onSubmit }) => {
+    const [state, setState] = useState({ ...INITIAL_STATE });
 
-    state = {...INITIAL_STATE}
-
-    handleChange = ({target}) => {
+    const handleChange = ({ target }) => {
         const { name, value } = target;
-        this.setState({
-            [name]: value
+        setState({
+            ...state,
+            [name]: value,
         })
-    }
+    };
 
-    handleSubmit = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        this.props.onSubmit({ ...this.state });
-        this.reset();
-    }
+        onSubmit({ ...state });
+        reset();
+    };
 
-    reset() {
-        this.setState({ ...INITIAL_STATE });
-    }
+    const reset = () => {
+        setState({ ...INITIAL_STATE });
+    };
 
-    render() {
-        const { contactNameId, contactNumberId, handleSubmit, handleChange } = this;
-        const { name, number } = this.state;
+    
+    const contactNameId = nanoid();
+    const contactNumberId = nanoid();
+    
+    const { name, number } = state;
 
-        return (
-            <form onSubmit={handleSubmit} className={styles.form}>
-                <div className={styles.formElements}>
-                    <label htmlFor={contactNameId}>Name</label>
-                    <input value={name} onChange={handleChange} id={contactNameId} name="name" required type="text" placeholder="Name" />
-                </div>
-                <div className={styles.formElements}>
-                    <label htmlFor={contactNumberId}>Number</label>
-                    <input value={number} onChange={handleChange} id={contactNumberId} name="number" required type="tel" placeholder="Number" /></div>
-                <button className={styles.btn} type="submit">Add contact</button>
-            </form>
-        )
-    }
+    return (
+        <form onSubmit={handleSubmit} className={styles.form}>
+            <div className={styles.formElements}>
+                <label htmlFor={contactNameId}>Name</label>
+                <input value={name} onChange={handleChange} id={contactNameId} name="name" required type="text" placeholder="Name" />
+            </div>
+            <div className={styles.formElements}>
+                <label htmlFor={contactNumberId}>Number</label>
+                <input value={number} onChange={handleChange} id={contactNumberId} name="number" required type="tel" placeholder="Number" /></div>
+            <button className={styles.btn} type="submit">Add contact</button>
+        </form>
+    );
 }
 
 export default MyContactForm;
